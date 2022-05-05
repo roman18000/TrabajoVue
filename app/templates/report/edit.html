@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block title %}Editar denuncia{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+{% if errors %}
+  {% for error in errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="alert alert-info" role="alert">
+    Los campos que no desea cambiar dejelo sin completar
+</div>
+
+  <h1>Crear una denuncia</h1>
+  <form class="row g-3" action="{{ url_for('report_modification',report_id = report.id) }}" method="POST">
+    <div class="col-md-6">
+      <label for="<title>Home</title>" class="form-label">Titulo</label>
+      <input type="text" class="form-control" id= "title" name ="title" placeholder="{{report.title}}" >
+    </div>
+    <div class="col-md-6">
+    <label for="category">Seleccione una categoria:</label>
+      <select class="form-control" id="category" name="category">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="coordenada_lat" class="form-label">Coordenadas Latitud</label>
+      <input type="text" class="form-control" id="coordenada_lat" name = "coordenada_lat" placeholder= "{{report.coordinates_latitude}}" >
+    </div>
+    <div class="col-md-6">
+      <label for="coordenda_long" class="form-label">Coordenadas Longitud</label>
+      <input type="text" class="form-control" id= "coordenda_long" name ="coordenda_long" placeholder="{{report.coordinates_longitude}}" >
+    </div>
+    <div class="col-md-6">
+    <label for="user_assing">Asigne un usuario del sistema:</label>
+      <select class="form-control" id="user_assing" name="user_assing">
+        {%if user_assing %}
+          <option value = {{user_assing.id}}>usuario: {{user_assing.username }} -- {{user_assing.first_name}} {{user_assing.last_name}}</option>
+        {%endif%}
+          <option value = "-1">NO ASIGNADO</option>
+        {% for user in users %}
+            <option value = "{{user.id}}">{{user.username }} -- {{user.first_name}} {{user.last_name}}</option>
+        {%endfor%}
+      </select>
+    </div>
+    <div class="col-12">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id= "name" name ="first_name" placeholder="{{report.first_name}}" >
+    </div>
+    <div class="col-12">
+      <label for="last_name" class="form-label">Apellido</label>
+      <input type="text" class="form-control" id= "last_name" name ="last_name" placeholder="{{report.last_name}}" >
+    </div>
+    <div class="col-12">
+      <label for="phone" class="form-label">Telefono</label>
+      <input type="text" class="form-control" id= "phone" name ="phone" placeholder="{{report.phone}}" >
+    </div>
+    <div class="col-12">
+      <label for="email" class="form-label">email</label>
+      <input type="email" class="form-control" id= "email" name ="email" placeholder="{{report.email}}" >
+    </div>
+    <div class="col-12">
+      <label for="description" class="form-label">Comentario</label>
+      <textarea class="form-control" rows="5" id="description" name ="description" placeholder="{{report.description}}"></textarea>
+    </div>
+    <div class="row mt-5">
+      <div class="col-4">
+        <button type="submit" class="btn btn-success btn-lg" >Modificar</button>
+      </div>
+      <div class="col-4">
+        <a href="{{ url_for('report_index') }}" class="btn btn-danger btn-lg " >Volver</a>
+      </div>
+    <div class="col-4">
+       <button type="reset" class="btn btn-secondary btn-lg" >Limpiar</button>
+    </div>
+   </div>
+  </form>
+
+
+  </div>
+{% endblock %}

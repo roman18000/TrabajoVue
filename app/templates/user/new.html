@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Nuevo usuario{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+{% if errors %}
+  {% for error in errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+  <h1>Crear un usuario</h1>
+  <form class="row g-3" action="{{ url_for('user_create') }}" method="POST">
+    <div class="col-md-6">
+      <label for="user" class="form-label">Usuario</label>
+      <input type="text" class="form-control" id= "user" name ="user" placeholder="Ingrese el usuario" required>
+    </div>
+    <div class="col-md-6">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name = "password" placeholder="*********" required>
+    </div>
+    <div class="col-md-12">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id= "email" name ="email" placeholder="example@algo.com" required>
+    </div>
+    <div class="col-12">
+      <label for="name" class="form-label">Ingrese su nombre </label>
+      <input type="text" class="form-control" id= "name" name ="first_name" placeholder="Nombre completo" required>
+    </div>
+    <div class="col-12">
+      <label for="last_name" class="form-label">Ingrese su apellido </label>
+      <input type="text" class="form-control" id= "last_name" name ="last_name" placeholder="Apellido completo" required>
+    </div>
+    <div class="row mt-5">
+      <div class="col-4">
+        <button type="submit" class="btn btn-success btn-lg" >Crear</button>
+      </div>
+      <div class="col-4">
+        <a href="{{ url_for('user_index') }}" class="btn btn-danger btn-lg " >Volver</a>
+      </div>
+    <div class="col-4">
+       <button type="reset" class="btn btn-secondary btn-lg" >Limpiar</button>
+    </div>
+   </div>
+  </form>
+
+
+  </div>
+{% endblock %}

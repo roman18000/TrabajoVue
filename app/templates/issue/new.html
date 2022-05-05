@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}Crear Issue{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1>Crear una consulta</h1>
+  <form class="row g-3" action="{{ url_for('issue_create') }}" method="POST">
+    <div class="col-md-12">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id= "email" name ="email" placeholder="example@algo.com" required>
+    </div>
+    <div class="col-md-12">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control rounded-o"  id="description" name ="description" placeholder="Ingrese la descripcion del asunto" rows="3" required> </textarea>
+    </div>
+
+    <div class="col-6">
+      <label for="name" class="form-label">Seleccione una Categoria</label>
+      <select class="form-select" name="category_id">
+        <option value='1'>Bug</option>
+        <option value='2'>Question</option>
+      </select>
+    </div>
+    <div class="col-6">
+      <label for="name" class="form-label">Seleccione un estado</label>
+      <select class="form-select" name="status_id">
+        <option  value='1'>New</option>
+        <option  value='2'>Todo</option>
+        <option  value='3'>In Progress</option>
+      </select>
+    </div>
+    <div class="d-grid gap-1">
+      <button type="submit" class="btn btn-success" >Crear</button>
+    </div>
+    <button type="reset" class="btn btn-secondary" >Limpiar</button>
+  </form>
+    <div>
+        <a href="{{ url_for('issue_index') }}" class="btn btn-danger " >Volver</a>
+    </div>
+{% endblock %}

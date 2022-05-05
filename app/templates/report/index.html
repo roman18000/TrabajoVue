@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+{% from "paginate.html" import render_paginate with context %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+  <h1>Denuncias </h1>
+
+
+<form class="row g" action="{{url_for('report_index') }}" method="GET">
+  <div class="col-2 ">
+    <h5>Fecha inicio</h5>
+    <input type="date" name="fecha_inicio" min="2021-01-01" />
+  </div>
+  <div class="col-2">
+    <h5>Fecha fin</h5>
+    <input type="date" name="fecha_fin"  min="2021-01-01" />
+  </div>
+
+<div class="  col-2 p-1 mt-1 ">
+
+    {% if texto %}
+        <input  type="text" name="texto_id" placeholder={{texto}}>
+    {% else %}
+        <input  type="text" name="texto_id" placeholder="Ingrese el titulo de la denuncia">
+    {% endif %}
+
+    <select name="status_id" class="form-select " id="status_id">
+        <option >{{filtro}}</option>
+        <option >{{values[0]}}</option>
+        <option >{{values[1]}}</option>
+        <option >{{values[2]}}</option>
+        <option >{{values[3]}}</option>
+    </select>
+</div>
+<div class="text-center ">
+<button class=" p-1 col-5 btn btn-outline-danger btn " type="submit">Filtrar </button>
+</div>
+
+</form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Titulo</th>
+        <th scope="col">Fecha de creacion</th>
+        <th scope="col">Usuario Asignado</th>
+        <th scope="col">Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for report in reportes.items %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>{{ report.title }}</td>
+        <td>{{ report.creation_date }}</td>
+        {% if report.user_assing.username %}
+          <td>{{ report.user_assing.username}}</td>
+        {% else %}
+          <td>Sin asignar</td>
+        {% endif %}
+        <td>{{ report.status}}</td>
+
+
+        <td>
+          <a href="{{ url_for('report_edit',report_id = report.id) }}" class="btn btn-success btn-sm"> Modificar </a>
+        </td>
+        <td>
+          <a href = "{{url_for('report_show',report_id = report.id)}}" id="show" class="btn btn-secondary btn-sm"  ;"> Mostrar </a>
+        </td>
+        {% if has_rol (session["id"],"report_destroy")%}
+        <td>
+          <a href="{{ url_for('report_delete',report_id = report.id) }}" class="btn btn-danger btn-sm"
+            onclick="return confirm('¿Estas seguro de eliminar al reporte {{report.title}}?');"> Eliminar </a>
+        </td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+      <p id = 'info'>  </p>
+      <div>
+        {{ render_paginate(reportes, index_route='report_index')}}
+      </div>
+
+     <div class="">
+       <a href="{{ url_for('report_new') }}" class="btn btn-success btn-lg"> Nuevo </a>
+       <a href="{{ url_for('home') }}" class="btn btn-secondary btn-lg"> Volver </a>
+     </div>
+
+
+  </tbody>
+<script type="text/javascript">
+
+
+
+  async function funcion(report_id) {
+    try {
+      card.innerHTML = ''
+
+      x = document.getElementById("show").setAttribute("disabled", "true");
+      const resPost = await fetch(`http://localhost:5000/api/report/show/${report_id}`);
+      console.log(resPost);
+      const post = await resPost.json()
+      show_card(post);
+      //document.getElementById('info').textContent = JSON.stringify(post)
+    }
+     catch (e) {
+      console.log(e);
+      }
+      return false;
+
+    }
+
+
+  function show_card(post){
+    card.innerHTML += `
+      <div class="card-body">
+      <h5 class="card-title">${post["name"]}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+      <p class="card-text">${post["id"]}</p>
+      <a href="#" class="card-link">Card link</a>
+      <a href="#" class="card-link">Another link</a>
+    </div>
+  `
+  }
+
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% from "paginate.html" import render_paginate with context %}
+{% block title %}Puntos encuentro{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<h1>Puntos de encuentros</h1>
+<form class="row g-2" action="{{url_for('point_index') }}" method="GET">
+  <div class="col-3 p-2 m-1 " >
+    {% if texto %}
+        <input  type="text" name="texto_id" placeholder={{texto}}>
+    {% else %}
+        <input  type="text" name="texto_id" placeholder="Ingrese el nombre">
+    {% endif %}
+  </div>
+
+  <div class="col-2 p-1 m-1">
+      <select name="status_id" class="form-select " id="status_id">
+          <option todos>{{filtro}}</option>
+          <option publicado>{{values[0]}}</option>
+          <option despublicado>{{values[1]}}</option>
+      </select>
+  </div>
+    <button class=" p-1 col-2 btn btn-outline-danger btn-lg " type="submit">Filtrar</button>
+</form>
+<table class="table mt-4">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Direccion</th>
+      <th scope="col">Latitud</th>
+      <th scope="col">Longitud</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Telefono</th>
+      <th scope="col">Mail</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for point in points.items %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>{{ point.name }}</td>
+        <td>{{ point.address }}</td>
+        <td>{{ point.coordinates_latitude }}</td>
+        <td>{{ point.coordinates_longitude }}</td>
+        <td>{{ point.status }}</td>
+        <td>{{ point.phone}}</td>
+        <td>{{ point.email}}</td>
+         {% if has_permission(session["id"],"puntos_encuentro_destroy") %}
+            <td>
+              <a href="{{ url_for('point_delete',point_id = point.id) }}" class="btn btn-secondary btn-sm" onclick="return confirm('¿Estas seguro de eliminar al punto de encuentro  {{point.name}}?');"> Eliminar </a>
+            </td>
+        {%endif%}
+        <td>
+          <a href="{{ url_for('point_edit',point_id = point.id) }}" class="btn btn-success btn-sm" > Modificar </a>
+        </td>
+      </tr>
+      {% endfor %}
+
+  </tbody>
+</table>
+
+
+<div>
+  {{ render_paginate(points, index_route='point_index')}}
+</div>
+
+<div class="mt-5">
+  <a href="{{ url_for('home') }}" class="btn btn-danger btn-lg mt-5" >Volver</a>
+  <a href="{{ url_for('point_new') }}" class="btn btn-primary btn-lg mt-5">Nuevo</a>
+</div>
+
+{% endblock %}

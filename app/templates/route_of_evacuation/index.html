@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% from "paginate.html" import render_paginate with context %}
+{% block title %}Rutas de evacuacion{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+
+
+<h1>Rutas de evacuacion</h1>
+<form class="row g-2" action=# method="GET">
+  <div class="col-3 p-2 m-1 " >
+    {% if texto %}
+        <input  type="text" name="texto_id" placeholder={{texto}}>
+    {% else %}
+        <input  type="text" name="texto_id" placeholder="Ingrese el nombre de la ruta">
+    {% endif %}
+  </div>
+
+  <div class="col-2 p-1 m-1">
+    <select name="status_id" class="form-select " id="status_id">
+        <option todos>{{filtro}}</option>
+        <option publicado>{{values[0]}}</option>
+        <option despublicado>{{values[1]}}</option>
+    </select>
+</div>
+<button class=" p-1 col-2 btn btn-outline-danger btn-lg " type="submit">Filtrar</button>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre de ruta </th>
+      <th scope="col">Descripción</th>
+      <th scope="col">Publicado</th>
+      <th  colspan="3" scope="col" > Operaciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for route in routes.items %}
+    <tr>
+      <th scope="row">{{loop.index}}</th>
+      <td>{{ route.name }}</td>
+      <td>{{ route.description }}</td>
+      {% if route.publicado %}
+        <td>✔</td>
+      {% else %}
+        <td>✖</td>
+      {% endif %}
+
+
+      {% if has_rol (session["id"],"route_of_evacuation_destroy")%}
+      <td>
+        <a href="{{url_for('route_delete', route_id = route.id)}}"  class="btn btn-secondary btn-sm"
+          onclick="return confirm('¿Estas seguro de eliminar al usuario {{route.name}}?');"> Eliminar </a>
+      </td>
+      {% endif %}
+      <td>
+        <a href="{{url_for('route_edit', route_id = route.id)}}"  class="btn btn-success btn-sm"  > Modificar </a>
+      </td>
+      {% if route.publicado %}
+        <td>
+          <a href="{{ url_for('route_publicate_despublicate',route_id = route.id) }}" class="btn btn-success btn-sm"> Despublicar </a>
+        </td>
+      {% else %}
+        <td>
+          <a href="{{ url_for('route_publicate_despublicate',route_id = route.id) }}" class="btn btn-success btn-sm"> Publicar  </a>
+        </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+  <div>
+    {{ render_paginate(routes, index_route='route_index')}}
+  </div>
+
+<div class="mt-5">
+  <a href="#" class="btn btn-danger btn-lg">Volver</a>
+  <a href="{{url_for('route_new')}}" class="btn btn-primary btn-lg">Nuevo</a>
+</div>
+
+
+{% endblock %}

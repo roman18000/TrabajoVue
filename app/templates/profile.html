@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Perfil{% endblock %}
+{% block head %}
+{{super()}}
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="justify-content-center text-center">
+    <h1>
+        {{user.username .capitalize()}}
+    </h1>
+    <div class="bg-gradient">
+        <h3> Email: {{user.email}}</h3>
+        <h3> Nombre: {{user.first_name}}</h3>
+        <h3> Apellido: {{user.last_name}}</h3>
+        <h3> Activo: {{user.active}}</h3>
+        <h3> Fecha de creacion: {{user.created_at}}</h3>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% from "paginate.html" import render_paginate with context %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+
+
+<h1>Usuarios del sistema</h1>
+<form class="row g-2" action="{{url_for('user_index') }}" method="GET">
+  <div class="col-3 p-2 m-1 " >
+    {% if texto %}
+        <input  type="text" name="texto_id" placeholder={{texto}}>
+    {% else %}
+        <input  type="text" name="texto_id" placeholder="Ingrese el nombre de usuario">
+    {% endif %}
+  </div>
+
+  <div class="col-2 p-1 m-1">
+    <select name="status_id" class="form-select " id="status_id">
+        <option todos>{{filtro}}</option>
+        <option publicado>{{values[0]}}</option>
+        <option despublicado>{{values[1]}}</option>
+    </select>
+</div>
+<button class=" p-1 col-2 btn btn-outline-danger btn-lg " type="submit">Filtrar</button>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Usuario</th>
+      <th scope="col">Email</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">Contraseña</th>
+      <th scope="col">Activo</th>
+      <th  colspan="3" scope="col" > Operaciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users.items %}
+    <tr>
+      <th scope="row">{{loop.index}}</th>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.first_name }}</td>
+      <td>{{ user.last_name }}</td>
+      <td>{{ user.password }}</td>
+      {% if user.active %}
+        <td>✔</td>
+      {% else %}
+        <td>✖</td>
+      {% endif %}
+
+      {% if has_permission(session["id"],"usuario_destroy") %}
+      <td>
+        <a href="{{ url_for('user_delete',user_id = user.id) }}" class="btn btn-secondary btn-sm"
+          onclick="return confirm('¿Estas seguro de eliminar al usuario {{user.user}}?');"> Eliminar </a>
+      </td>
+      {% endif %}
+      <td>
+        <a href="{{ url_for('user_edit',user_id = user.id) }}" class="btn btn-success btn-sm"  > Modificar </a>
+      </td>
+      {% if user.active %}
+        <td>
+          <a href="{{ url_for('user_activate_desactivate',user_id = user.id) }}" class="btn btn-success btn-sm"> Bloquear </a>
+        </td>
+      {% else %}
+        <td>
+          <a href="{{ url_for('user_activate_desactivate',user_id = user.id) }}" class="btn btn-success btn-sm"> Desbloquear </a>
+        </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div>
+  {{ render_paginate(users, index_route='user_index')}}
+</div>
+
+<div class="mt-5">
+  <a href="{{ url_for('home') }}" class="btn btn-danger btn-lg">Volver</a>
+  <a href="{{ url_for('user_new') }}" class="btn btn-primary btn-lg">Nuevo</a>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% from "paginate.html" import render_paginate with context %}
+{% block title %}Issue{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+  <h1>Consultas</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Email</th>
+        <th scope="col">Descripcion</th>
+        <th scope="col">Categoria</th>
+        <th scope="col">Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for issue in issues.items %}
+      <tr>
+        <th scope="row">{{loop.index}}</th>
+        <td>{{ issue.email }}</td>
+        <td>{{ issue.description }}</td>
+        <td>{{ issue.category.name }}</td>
+        <td>{{ issue.status.name }}</td>
+    {% endfor %}
+      </tbody>
+  </table>
+
+     <div>
+       {# Funcion importada de "paginate.html" en el head #}
+
+       {{ render_paginate(issues, index_route='issue_index')}}
+     </div>
+
+
+
+
+
+    <div class="">
+      <a href="{{ url_for('issue_new') }}" class="btn btn-success btn-lg"> Nuevo </a>
+      <a href="{{ url_for('home') }}" class="btn btn-secondary btn-lg"> Volver </a>
+    </div>
+
+
+{% endblock %}

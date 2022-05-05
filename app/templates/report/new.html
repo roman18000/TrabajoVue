@@ -1,0 +1,84 @@
+
+    {% extends "layout.html" %}
+{% block title %}Nueva denuncia{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+{% if errors %}
+  {% for error in errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+
+  <h1>Crear una denuncia</h1>
+  <form class="row g-3" action="{{ url_for('report_create')}}" method="POST">
+    <div class="col-md-6">
+      <label for="<title>Home</title>" class="form-label">Titulo</label>
+      <input type="text" class="form-control" id= "title" name ="title" placeholder="Ingrese un titulo" required>
+    </div>
+    <div class="col-md-6">
+    <label for="category">Seleccione una categoria:</label>
+      <select class="form-control" id="category" name="category">
+        <option>Alcantarilla Tapada</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="coordenada_lat" class="form-label">Coordenadas Latitud</label>
+      <input type="text" class="form-control" id="coordenada_lat" name = "coordenada_lat" placeholder= "Ingrese coordenada latitud" required>
+    </div>
+    <div class="col-md-6">
+      <label for="coordenda_long" class="form-label">Coordenadas Longitud</label>
+      <input type="text" class="form-control" id= "coordenda_long" name ="coordenda_long" placeholder=Ingrese coordenada Longitud" required>
+    </div>
+    <div class="col-12">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id= "first_name" name ="first_name" placeholder="Nombre completo" required>
+    </div>
+    <div class="col-12">
+      <label for="last_name" class="form-label">Apellido</label>
+      <input type="text" class="form-control" id= "last_name" name ="last_name" placeholder="Apellido completo" required>
+    </div>
+    <div class="col-12">
+      <label for="phone" class="form-label">Telefono</label>
+      <input type="text" class="form-control" id= "phone" name ="phone" placeholder="Ingrese su telefono" required>
+    </div>
+    <div class="col-12">
+      <label for="email" class="form-label">email</label>
+      <input type="email" class="form-control" id= "email" name ="email" placeholder="Ingrese su email" >
+    </div>
+    <div class="col-12">
+      <label for="descript" class="form-label">Descripcion </label>
+      <textarea class="form-control" rows="5" name = "descript" id="descript" placeholder="Ingrese un comentario describiendo la denuncia" required oninvalid="this.setCustomValidity('Se necesita una descripcion')"></textarea>
+    </div>
+    <div class="col-md-6">
+    <label for="user_assing">Asigne un usuario del sistema:</label>
+      <select class="form-control" id="user_assing" name="user_assing">
+        <option value = -1 >SIN ASIGNAR</option>
+        {% for user in users %}
+            <option value = "{{user.id}}">{{user.username }} -- {{user.first_name}} {{user.last_name}}</option>
+        {%endfor%}
+      </select>
+    <div class="row mt-5">
+      <div class="col-4">
+        <button type="submit" class="btn btn-success btn-lg" >Crear</button>
+      </div>
+      <div class="col-4">
+        <a href="{{ url_for('report_index') }}" class="btn btn-danger btn-lg " >Volver</a>
+      </div>
+    <div class="col-4">
+       <button type="reset" class="btn btn-secondary btn-lg" >Limpiar</button>
+    </div>
+   </div>
+  </form>
+
+
+  </div>
+{% endblock %}
